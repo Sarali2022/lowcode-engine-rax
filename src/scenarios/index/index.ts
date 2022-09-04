@@ -3,8 +3,6 @@ import { createFetchHandler } from '@alilc/lowcode-datasource-fetch-handler'
 import registerPlugins from '../../universal/plugin';
 import { scenarioSwitcher } from '../../sample-plugins/scenario-switcher';
 import '../../universal/global.scss';
- import { createElement, forwardRef, ForwardRefRenderFunction } from 'rax';
-
 const preference = new Map();
 preference.set('DataSourcePane', {
   importPlugins: [],
@@ -22,7 +20,6 @@ preference.set('DataSourcePane', {
   await plugins.register(scenarioSwitcher);
   await registerPlugins();
   init(document.getElementById('lce-container')!, {
-    designMode: 'live',
     locale: 'zh-CN',
     enableCondition: true,
     enableCanvasLock: true,

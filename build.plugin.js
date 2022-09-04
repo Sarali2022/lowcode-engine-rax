@@ -24,6 +24,7 @@ module.exports = ({ onGetWebpackConfig }) => {
       const hasTsx = fs.existsSync(join(`./src/scenarios/${name}/index.tsx`));
       config.merge({
         entry: {
+          components: require.resolve(`./src/components/index.ts`),
           [name]: hasTsx ? require.resolve(`./src/scenarios/${name}/index.tsx`) : require.resolve(`./src/scenarios/${name}/index.ts`),
         },
       });
