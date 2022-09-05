@@ -1,11 +1,18 @@
-import ReactDOM from 'react-dom';
-import React, { useState } from 'react';
-import { Loading } from '@alifd/next';
+const loadingStyle = {
+  width: '100vw',
+  height: '100vh',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontWeight: 300,
+  fontSize: '24px',
+  lineHeight: '36px',
+};
+import { useState, render } from "rax";
+import UniversalDriver from 'driver-universal';
 import { buildComponents, assetBundle, AssetLevel, AssetLoader } from '@alilc/lowcode-utils';
-import ReactRenderer from '@alilc/lowcode-react-renderer';
-import { injectComponents } from '@alilc/lowcode-plugin-inject';
-import { createFetchHandler } from '@alilc/lowcode-datasource-fetch-handler'
-
+import ReactRenderer from '@alilc/lowcode-rax-renderer';
+const Loading = () => <div style={loadingStyle} className="lowcode-plugin-sample-preview-loading"> <h1>Loading...</h1> </div>;
 import { getProjectSchemaFromLocalStorage, getPackagesFromLocalStorage } from './universal/utils';
 
 const getScenarioName = function() {
@@ -22,6 +29,7 @@ const SamplePreview = () => {
     const scenarioName = getScenarioName();
     const packages = getPackagesFromLocalStorage(scenarioName);
     const projectSchema = getProjectSchemaFromLocalStorage(scenarioName);
+    console.log("projectSchema: ", projectSchema);
     const { componentsMap: componentsMapArray, componentsTree } = projectSchema;
     const componentsMap: any = {};
     componentsMapArray.forEach((component: any) => {
@@ -44,8 +52,12 @@ const SamplePreview = () => {
 
     // TODO asset may cause pollution
     const assetLoader = new AssetLoader();
-    await assetLoader.load(libraryAsset);
-    const components = await injectComponents(buildComponents(libraryMap, componentsMap));
+    try{
+      await assetLoader.load(libraryAsset);
+    } catch (e) {
+      console.warn('[LowcodePreview] load resources failed: ', e);
+    }
+    const components = buildComponents(libraryMap, componentsMap);
 
     setData({
       schema,
@@ -57,7 +69,7 @@ const SamplePreview = () => {
 
   if (!schema || !components) {
     init();
-    return <Loading fullScreen />;
+    return <Loading />;
   }
 
   return (
@@ -66,14 +78,9 @@ const SamplePreview = () => {
         className="lowcode-plugin-sample-preview-content"
         schema={schema}
         components={components}
-        appHelper={{
-          requestHandlersMap: {
-            fetch: createFetchHandler()
-          }
-        }}
       />
     </div>
   );
 };
 
-ReactDOM.render(<SamplePreview />, document.getElementById('ice-container'));
+render(<SamplePreview />, document.getElementById('ice-container'), { driver: UniversalDriver });

@@ -15,8 +15,6 @@
         "https://g.alicdn.com/platform/c/lodash/4.6.1/lodash.min.js"
       ]
     },
-
-
     {
       "title": "fusion组件库",
       "package": "@alifd/next",
@@ -26,9 +24,61 @@
         "https://g.alicdn.com/code/lib/alifd__next/1.24.18/next-with-locales.min.js"
       ],
       "library": "Next"
+    },
+    {
+      "title": "MyComponents",
+      "package": "MyComponents",
+      "version": "1.24.18",
+      "urls": [
+        "./css/components.css",
+        "./js/components.js"
+      ],
+      "library": "MyComponents"
     }
   ],
   "components": [
+    {
+      "componentName": "Page",
+      "npm": {
+        "package":"MyComponents",
+        "exportName": "Page",
+        "version": "0.1.0",
+        "main": "src/index.ts",
+        "destructuring": true,
+        "subName": ""
+      }
+    },
+    {
+      "componentName": "ExampleComponent",
+      "npm": {
+        "package":"MyComponents",
+        "exportName": "ExampleComponent",
+        "version": "0.1.0",
+        "main": "src/index.ts",
+        "destructuring": true,
+        "subName": ""
+      },
+      "configure": {
+        "props": [
+          {
+            "name": "name",
+            "setter": "StringSetter"
+          },
+          {
+            "name": "content",
+            "setter": "StringSetter"
+          }
+        ]
+      },
+      "snippets": [
+        {
+          "title": "ExampleComponent",
+          "schema": {
+            "componentName": "ExampleComponent"
+          }
+        }
+      ]
+    }
   ],
   "sort": {
     "groupList": [
